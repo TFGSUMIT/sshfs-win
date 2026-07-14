@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="SSHFS-Win" Language="1033" Version="3.7.20220713" Manufacturer="Navimatics LLC">
+    <Package InstallerVersion="300" Compressed="yes" InstallScope="perMachine" />
+
+    <Feature Id="Complete" Level="1">
+      <ComponentGroupRef Id="Main" />
+    </Feature>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLDIR" Name="SSHFS-Win">
+          <Component Id="MainExecutable" Guid="*">
+            <File Id="MainExecutable" Name="sshfs-win.exe" Source="..\..\..\src\sshfs-win.c" KeyPath="yes" />
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <ComponentGroup Id="Main">
+      <ComponentRef Id="MainExecutable" />
+    </ComponentGroup>
+
+    <CustomAction Id="InitUNCHandler" BinaryKey="sshfs-win.exe" DllEntry="init_unc_handler" Return="ignore" />
+    <InstallExecuteSequence>
+      <Custom Action="InitUNCHandler" After="InstallFiles" />
+    </InstallExecuteSequence>
+  </Product>
+</Wix>
